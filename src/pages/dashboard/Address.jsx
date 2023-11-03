@@ -7,7 +7,7 @@ import OneView from 'src/sections/address/view';
 const Address = () => (
   <>
     <Helmet>
-      <title> Pay Crypto | Addresses</title>
+      <title> Pay Crypto | Address</title>
     </Helmet>
 
     <OneView />

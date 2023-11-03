@@ -12,7 +12,7 @@ export default function FourView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page Four </Typography>
+      <Typography variant="h4"> Transaction </Typography>
 
       <Box
         sx={{

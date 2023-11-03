@@ -12,7 +12,7 @@ const CashOut = () => {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page Three </Typography>
+      <Typography variant="h4"> CashOut </Typography>
 
       <Box
         sx={{

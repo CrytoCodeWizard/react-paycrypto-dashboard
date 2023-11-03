@@ -12,7 +12,7 @@ export default function TwoView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page Two </Typography>
+      <Typography variant="h4"> Withdraw </Typography>
 
       <Box
         sx={{
