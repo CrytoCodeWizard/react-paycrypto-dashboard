@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import TwoView from 'src/sections/two/view';
+import TwoView from 'src/sections/withdraw/view';
 
 // ----------------------------------------------------------------------
 
