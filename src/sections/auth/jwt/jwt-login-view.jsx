@@ -36,17 +36,13 @@ export default function JwtLoginView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    username: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
   });
 
-  // const defaultValues = {
-  //   email: 'demo@minimals.cc',
-  //   password: 'demo1234',
-  // };
   const defaultValues = {
-    email: 'admin@admin.com',
-    password: 'admin',
+    username: '',
+    password: '',
   };
 
   const methods = useForm({

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import FiveView from 'src/sections/dashboard/view';
+import Home from 'src/sections/dashboard/view';
 
 // ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ const Dashboard = () => (
       <title> Dashboard: Home </title>
     </Helmet>
 
-    <FiveView />
+    <Home />
   </>
 )
 
