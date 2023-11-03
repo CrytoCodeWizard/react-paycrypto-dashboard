@@ -98,24 +98,27 @@ export function AuthProvider({ children }) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email, password) => {
-    const data = {
-      email,
-      password,
-    };
+  const login = useCallback(async (username, password) => {
+    const data = new URLSearchParams();
+    data.append('username', username);
+    data.append('password', password);
 
-    const response = await axios.post(endpoints.auth.login, data);
+    const response = await axios.post(endpoints.auth.login, data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
 
-    const { accessToken, user } = response.data;
+    const { access_token, user } = response.data;
 
-    setSession(accessToken);
+    setSession(access_token);
 
     dispatch({
       type: 'LOGIN',
       payload: {
         user: {
           ...user,
-          accessToken,
+          access_token,
         },
       },
     });

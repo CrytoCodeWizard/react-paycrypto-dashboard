@@ -12,7 +12,7 @@ export default function OneView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page One </Typography>
+      <Typography variant="h4"> Addresses </Typography>
 
       <Box
         sx={{
