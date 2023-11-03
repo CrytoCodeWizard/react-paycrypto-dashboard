@@ -53,22 +53,22 @@ export function useNavData() {
         items: [
           {
             title: 'address',
-            path: paths.dashboard.root,
+            path: paths.dashboard.address,
             icon: ICONS.file
           },
           {
             title: 'transaction',
-            path: paths.dashboard.two,
+            path: paths.dashboard.transaction,
             icon: ICONS.invoice
           },
           {
             title: 'withdraw',
-            path: paths.dashboard.three,
+            path: paths.dashboard.withdraw,
             icon: ICONS.banking,
           },
           {
             title: 'cashout',
-            path: paths.dashboard.three,
+            path: paths.dashboard.cashout,
             icon: ICONS.job,
           }
         ],

@@ -7,12 +7,12 @@ import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
-export default function FiveView() {
+const CashOut = () => {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page Five </Typography>
+      <Typography variant="h4"> Page Three </Typography>
 
       <Box
         sx={{
@@ -27,3 +27,5 @@ export default function FiveView() {
     </Container>
   );
 }
+
+export default CashOut;

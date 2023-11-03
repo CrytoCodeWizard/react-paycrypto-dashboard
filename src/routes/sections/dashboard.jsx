@@ -7,15 +7,14 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
+const IndexPage = lazy(() => import('src/pages/dashboard/Dashboard'));
+const Address = lazy(() => import('src/pages/dashboard/Address'));
+const Withdraw = lazy(() => import('src/pages/dashboard/Withdraw'));
+const Transaction = lazy(() => import('src/pages/dashboard/Transaction'));
+const CashOut = lazy(() => import('src/pages/dashboard/CashOut'));
 
-const IndexPage = lazy(() => import('src/pages/dashboard/one'));
-const PageTwo = lazy(() => import('src/pages/dashboard/two'));
-const PageThree = lazy(() => import('src/pages/dashboard/three'));
-const PageFour = lazy(() => import('src/pages/dashboard/four'));
-const PageFive = lazy(() => import('src/pages/dashboard/five'));
+const PageFive = lazy(() => import('src/pages/dashboard/Dashboard'));
 const PageSix = lazy(() => import('src/pages/dashboard/six'));
-
-// ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
   {
@@ -31,12 +30,14 @@ export const dashboardRoutes = [
     ),
     children: [
       { element: <IndexPage />, index: true },
-      { path: 'two', element: <PageTwo /> },
-      { path: 'three', element: <PageThree /> },
+      { path: 'address', element: <Address /> },
+      { path: 'transaction', element: <Transaction /> },
+      { path: 'withdraw', element: <Withdraw /> },
+      { path: 'cashout', element: <CashOut /> },
       {
         path: 'group',
         children: [
-          { element: <PageFour />, index: true },
+          // { element: <PageFour />, index: true },
           { path: 'five', element: <PageFive /> },
           { path: 'six', element: <PageSix /> },
         ],

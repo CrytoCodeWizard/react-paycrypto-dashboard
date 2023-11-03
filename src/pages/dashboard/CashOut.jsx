@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import OneView from 'src/sections/one/view';
+import Cashout from 'src/sections/cashout/view';
 
 // ----------------------------------------------------------------------
 
@@ -8,10 +8,10 @@ export default function Page() {
   return (
     <>
       <Helmet>
-        <title> Pay Crypto | Addresses</title>
+        <title> Dashboard: CashOut</title>
       </Helmet>
 
-      <OneView />
+      <Cashout />
     </>
   );
 }

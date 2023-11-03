@@ -5,14 +5,12 @@ import Typography from '@mui/material/Typography';
 
 import { useSettingsContext } from 'src/components/settings';
 
-// ----------------------------------------------------------------------
-
-export default function ThreeView() {
+const Dashboard = () => {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page Three </Typography>
+      <Typography variant="h4"> Welcome to Pay Crypto </Typography>
 
       <Box
         sx={{
@@ -27,3 +25,5 @@ export default function ThreeView() {
     </Container>
   );
 }
+
+export default Dashboard;
