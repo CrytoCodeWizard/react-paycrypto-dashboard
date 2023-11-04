@@ -26,9 +26,9 @@ import {
 
 const TABLE_HEAD = [
 	{ id: 'user', label: 'User' },
-	{ id: 'address', label: 'Address', align: 'right' },
-	{ id: 'transHash', label: 'Transaction Hash', align: 'right' },
-	{ id: 'amount', label: 'Amount', align: 'right' }
+	{ id: 'address', label: 'Address', align: 'left' },
+	{ id: 'transHash', label: 'Transaction Hash', align: 'left' },
+	{ id: 'amount', label: 'Amount', align: 'left' }
 ];
 
 const TransactionTable = () => {
@@ -67,7 +67,9 @@ const TransactionTable = () => {
 	return (
 		<>
 			<Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 3 }}>
-				<Typography variant="h6">Search Transaction</Typography>
+				<Typography variant="h6">
+					{filteredData.length} Transactions Found
+				</Typography>
 
 				<Tooltip title="Search Transaction">
 					<TextField
@@ -86,7 +88,7 @@ const TransactionTable = () => {
 			</Stack>
 			<TableContainer sx={{ mt: 3, position: 'relative', overflow: 'unset' }}>
 				<Scrollbar>
-					<Table sx={{ minWidth: 800 }}>
+					<Table size="small" sx={{ minWidth: 800 }}>
 						<TableHeadCustom headLabel={TABLE_HEAD} />
 
 						<TableBody>
@@ -103,9 +105,9 @@ const TransactionTable = () => {
 											onClick={() => table.onSelectRow(row.name)}
 										>
 											<TableCell>{row.user_id}</TableCell>
-											<TableCell align="right">{row.address_id}</TableCell>
-											<TableCell align="right">{row.transaction_hash}</TableCell>
-											<TableCell align="right">{row.amount}</TableCell>
+											<TableCell align="left">{row.address_id}</TableCell>
+											<TableCell align="left">{row.transaction_hash}</TableCell>
+											<TableCell align="left">{row.amount}</TableCell>
 										</TableRow>
 									))
 							}

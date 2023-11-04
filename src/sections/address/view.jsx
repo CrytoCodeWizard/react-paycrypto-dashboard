@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import ComponentBlock from 'src/components/component-block';
 import { useSettingsContext } from 'src/components/settings';
 
-import Table from 'src/sections/address/AddressTable';
+import Table from 'src/sections/address/Table';
 
 const AddressPanel = () => {
   const settings = useSettingsContext();

@@ -13,7 +13,7 @@ const TransactionPanel = () => {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Address </Typography>
+      <Typography variant="h4"> Transaction </Typography>
 
       <Stack spacing={3} sx={{ mt: 5 }}>
         <ComponentBlock>

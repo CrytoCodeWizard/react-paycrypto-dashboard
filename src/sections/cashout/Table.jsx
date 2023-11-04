@@ -26,16 +26,16 @@ import {
 
 const TABLE_HEAD = [
     { id: 'user', label: 'User' },
-    { id: 'total_in', label: 'Total In', align: 'right' },
-    { id: 'total_out', label: 'Total Out', align: 'right' },
-    { id: 'deposit_energy', label: 'Deposit Energy', align: 'right' },
-    { id: 'withdraw_energy', label: 'Withdraw Energy', align: 'right' },
-    { id: 'empty_total', label: 'Empty Total', align: 'right' },
-    { id: 'casino_hash', label: 'Casino Hash', align: 'right' },
-    { id: 'agency_hash', label: 'Agency Hash', align: 'right' },
-    { id: 'withdrawal_hash', label: 'Withdrawal Hash', align: 'right' },
-    { id: 'status', label: 'status', align: 'right' },
-    { id: 'created_date', label: 'Create At', align: 'right' }
+    { id: 'total_in', label: 'Total In', align: 'left' },
+    { id: 'total_out', label: 'Total Out', align: 'left' },
+    { id: 'deposit_energy', label: 'Deposit Energy', align: 'left' },
+    { id: 'withdraw_energy', label: 'Withdraw Energy', align: 'left' },
+    { id: 'empty_total', label: 'Empty Total', align: 'left' },
+    { id: 'casino_hash', label: 'Casino Hash', align: 'left' },
+    { id: 'agency_hash', label: 'Agency Hash', align: 'left' },
+    { id: 'withdrawal_hash', label: 'Withdrawal Hash', align: 'left' },
+    { id: 'status', label: 'status', align: 'left' },
+    { id: 'created_date', label: 'Create At', align: 'left' }
 ];
 
 const CashOutTable = () => {
@@ -74,7 +74,9 @@ const CashOutTable = () => {
     return (
         <>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 3 }}>
-                <Typography variant="h6">Search CashOut</Typography>
+                <Typography variant="h6">
+                    {filteredData.length} CashOut Found
+                </Typography>
 
                 <Tooltip title="Search CashOut">
                     <TextField
@@ -93,7 +95,7 @@ const CashOutTable = () => {
             </Stack>
             <TableContainer sx={{ mt: 3, position: 'relative', overflow: 'unset' }}>
                 <Scrollbar>
-                    <Table sx={{ minWidth: 800 }}>
+                    <Table size="small" sx={{ minWidth: 800 }}>
                         <TableHeadCustom headLabel={TABLE_HEAD} />
 
                         <TableBody>
@@ -110,16 +112,16 @@ const CashOutTable = () => {
                                             onClick={() => table.onSelectRow(row.name)}
                                         >
                                             <TableCell>{row.user_id}</TableCell>
-                                            <TableCell align="right">{row.total_in}</TableCell>
-                                            <TableCell align="right">{row.total_out}</TableCell>
-                                            <TableCell align="right">{row.deposit_energy}</TableCell>
-                                            <TableCell align="right">{row.withdraw_energy}</TableCell>
-                                            <TableCell align="right">{row.emptyTotal}</TableCell>
-                                            <TableCell align="right">{row.casino_hash}</TableCell>
-                                            <TableCell align="right">{row.agency_hash}</TableCell>
-                                            <TableCell align="right">{row.withdrawal_hash}</TableCell>
-                                            <TableCell align="right">{row.status}</TableCell>
-                                            <TableCell align="right">{row.created_date}</TableCell>
+                                            <TableCell align="left">{row.total_in}</TableCell>
+                                            <TableCell align="left">{row.total_out}</TableCell>
+                                            <TableCell align="left">{row.deposit_energy}</TableCell>
+                                            <TableCell align="left">{row.withdraw_energy}</TableCell>
+                                            <TableCell align="left">{row.emptyTotal}</TableCell>
+                                            <TableCell align="left">{row.casino_hash}</TableCell>
+                                            <TableCell align="left">{row.agency_hash}</TableCell>
+                                            <TableCell align="left">{row.withdrawal_hash}</TableCell>
+                                            <TableCell align="left">{row.status}</TableCell>
+                                            <TableCell align="left">{row.created_date}</TableCell>
                                         </TableRow>
                                     ))
                             }

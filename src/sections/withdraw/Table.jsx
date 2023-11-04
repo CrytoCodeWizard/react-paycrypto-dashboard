@@ -26,10 +26,10 @@ import {
 
 const TABLE_HEAD = [
     { id: 'withdrawAddress', label: 'Withdraw Address' },
-    { id: 'user', label: 'User', align: 'right' },
-    { id: 'blockHash', label: 'Blockchain Hash', align: 'right' },
-    { id: 'amount', label: 'Amount', align: 'right' },
-    { id: 'status', label: 'Status', align: 'right' }
+    { id: 'user', label: 'User', align: 'left' },
+    { id: 'blockHash', label: 'Blockchain Hash', align: 'left' },
+    { id: 'amount', label: 'Amount', align: 'left' },
+    { id: 'status', label: 'Status', align: 'left' }
 ];
 
 const WithTable = () => {
@@ -68,7 +68,9 @@ const WithTable = () => {
     return (
         <>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 3 }}>
-                <Typography variant="h6">Search Withdraw</Typography>
+                <Typography variant="h6">
+                    {filteredData.length} Withdraw Found
+                </Typography>
 
                 <Tooltip title="Search Withdraw">
                     <TextField
@@ -87,7 +89,7 @@ const WithTable = () => {
             </Stack>
             <TableContainer sx={{ mt: 3, position: 'relative', overflow: 'unset' }}>
                 <Scrollbar>
-                    <Table sx={{ minWidth: 800 }}>
+                    <Table size="small" sx={{ minWidth: 800 }}>
                         <TableHeadCustom headLabel={TABLE_HEAD} />
 
                         <TableBody>
@@ -104,10 +106,10 @@ const WithTable = () => {
                                             onClick={() => table.onSelectRow(row.name)}
                                         >
                                             <TableCell>{row.withdraw_address}</TableCell>
-                                            <TableCell align="right">{row.user_id}</TableCell>
-                                            <TableCell align="right">{row.blockchain_hash}</TableCell>
-                                            <TableCell align="right">{row.amount}</TableCell>
-                                            <TableCell align="right">{row.status}</TableCell>
+                                            <TableCell align="left">{row.user_id}</TableCell>
+                                            <TableCell align="left">{row.blockchain_hash}</TableCell>
+                                            <TableCell align="left">{row.amount}</TableCell>
+                                            <TableCell align="left">{row.status}</TableCell>
                                         </TableRow>
                                     ))
                             }

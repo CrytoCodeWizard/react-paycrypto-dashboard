@@ -26,9 +26,9 @@ import {
 
 const TABLE_HEAD = [
 	{ id: 'address', label: 'Address' },
-	{ id: 'user', label: 'User', align: 'right' },
-	{ id: 'totalIn', label: 'Total In', align: 'right' },
-	{ id: 'totalOut', label: 'Total Out', align: 'right' }
+	{ id: 'user', label: 'User', align: 'left' },
+	{ id: 'totalIn', label: 'Total In', align: 'left' },
+	{ id: 'totalOut', label: 'Total Out', align: 'left' }
 ];
 
 const AddressTable = () => {
@@ -66,7 +66,9 @@ const AddressTable = () => {
 	return (
 		<>
 			<Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 3 }}>
-				<Typography variant="h6">Search Address</Typography>
+				<Typography variant="h6">
+					{filteredData.length} Address Found
+				</Typography>
 
 				<Tooltip title="Search Address">
 					<TextField
@@ -85,7 +87,7 @@ const AddressTable = () => {
 			</Stack>
 			<TableContainer sx={{ mt: 3, position: 'relative', overflow: 'unset' }}>
 				<Scrollbar>
-					<Table sx={{ minWidth: 800 }}>
+					<Table size="small" sx={{ minWidth: 800 }}>
 						<TableHeadCustom headLabel={TABLE_HEAD} />
 
 						<TableBody>
@@ -102,9 +104,9 @@ const AddressTable = () => {
 											onClick={() => table.onSelectRow(row.name)}
 										>
 											<TableCell>{row.address}</TableCell>
-											<TableCell align="right">{row.user_id}</TableCell>
-											<TableCell align="right">{row.total_in}</TableCell>
-											<TableCell align="right">{row.total_out}</TableCell>
+											<TableCell align="left">{row.user_id}</TableCell>
+											<TableCell align="left">{row.total_in}</TableCell>
+											<TableCell align="left">{row.total_out}</TableCell>
 										</TableRow>
 									))
 							}
