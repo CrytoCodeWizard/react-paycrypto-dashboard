@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import AddressTable from 'src/sections/address/view';
+import AddressPanel from 'src/sections/address/view';
 
 // ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ const Address = () => (
       <title> Pay Crypto | Address</title>
     </Helmet>
 
-    <AddressTable />
+    <AddressPanel />
   </>
 )
 

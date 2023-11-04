@@ -16,9 +16,11 @@ export const paths = {
       register: `${ROOTS.AUTH}/jwt/register`,
     },
   },
+
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
+    profile: `${ROOTS.DASHBOARD}/profile`,
     address: `${ROOTS.DASHBOARD}/address`,
     transaction: `${ROOTS.DASHBOARD}/transaction`,
     withdraw: `${ROOTS.DASHBOARD}/withdraw`,

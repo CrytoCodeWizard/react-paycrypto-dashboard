@@ -12,6 +12,7 @@ const Address = lazy(() => import('src/pages/dashboard/Address'));
 const Withdraw = lazy(() => import('src/pages/dashboard/Withdraw'));
 const Transaction = lazy(() => import('src/pages/dashboard/Transaction'));
 const CashOut = lazy(() => import('src/pages/dashboard/CashOut'));
+const Profile = lazy(() => import('src/pages/dashboard/Profile'));
 
 const PageFive = lazy(() => import('src/pages/dashboard/Dashboard'));
 const PageSix = lazy(() => import('src/pages/dashboard/six'));
@@ -34,6 +35,7 @@ export const dashboardRoutes = [
       { path: 'transaction', element: <Transaction /> },
       { path: 'withdraw', element: <Withdraw /> },
       { path: 'cashout', element: <CashOut /> },
+      { path: 'profile', element: <Profile /> },
       {
         path: 'group',
         children: [

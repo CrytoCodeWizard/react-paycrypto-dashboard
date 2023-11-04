@@ -17,8 +17,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-// ----------------------------------------------------------------------
-
 const OPTIONS = [
   {
     label: 'Home',
@@ -26,15 +24,13 @@ const OPTIONS = [
   },
   {
     label: 'Profile',
-    linkTo: '/#1',
+    linkTo: '/dashboard/profile',
   },
   {
     label: 'Settings',
     linkTo: '/#2',
   },
 ];
-
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
 
