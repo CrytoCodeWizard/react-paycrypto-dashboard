@@ -52,6 +52,11 @@ export function useNavData() {
         subheader: '',
         items: [
           {
+            title: 'home',
+            path: paths.dashboard.root,
+            icon: ICONS.dashboard
+          },
+          {
             title: 'address',
             path: paths.dashboard.address,
             icon: ICONS.file

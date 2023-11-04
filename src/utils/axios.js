@@ -13,8 +13,6 @@ axiosInstance.interceptors.response.use(
 
 export default axiosInstance;
 
-// ----------------------------------------------------------------------
-
 export const fetcher = async (args) => {
   const [url, config] = Array.isArray(args) ? args : [args];
 
@@ -22,8 +20,6 @@ export const fetcher = async (args) => {
 
   return res.data;
 };
-
-// ----------------------------------------------------------------------
 
 export const endpoints = {
   chat: '/api/chat',
@@ -49,5 +45,17 @@ export const endpoints = {
     list: '/api/product/list',
     details: '/api/product/details',
     search: '/api/product/search',
+  },
+  address: {
+    list: '/address',
+  },
+  transaction: {
+    list: '/transaction',
+  },
+  withdraw: {
+    list: '/withdraw',
+  },
+  cashout: {
+    list: '/cashout',
   },
 };

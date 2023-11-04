@@ -1,31 +1,29 @@
-import Box from '@mui/material/Box';
-import { alpha } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
+import ComponentBlock from 'src/components/component-block';
 import { useSettingsContext } from 'src/components/settings';
 
-// ----------------------------------------------------------------------
+import Table from 'src/sections/cashout/Table';
 
-const CashOut = () => {
+const CashOutPanel = () => {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Typography variant="h4"> CashOut </Typography>
 
-      <Box
-        sx={{
-          mt: 5,
-          width: 1,
-          height: 320,
-          borderRadius: 2,
-          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.04),
-          border: (theme) => `dashed 1px ${theme.palette.divider}`,
-        }}
-      />
+      <Stack spacing={3} sx={{ mt: 5 }}>
+        <ComponentBlock>
+          <Card sx={{ width: 1 }}>
+            <Table />
+          </Card>
+        </ComponentBlock>
+      </Stack>
     </Container>
   );
 }
 
-export default CashOut;
+export default CashOutPanel;
