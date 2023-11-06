@@ -37,6 +37,8 @@ const TransactionTable = () => {
 	const [currentPage, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(50);
 	const [totalCount, setTotalCount] = useState(0);
+	const [userData, setUserData] = useState([]);
+	const [mounted, setMounted] = useState(false);
 
 	const table = useTable({
 		defaultOrderBy: "user"
@@ -46,7 +48,12 @@ const TransactionTable = () => {
 
 	useEffect(() => {
 		axios
-			.get(endpoints.transaction.search)
+			.get(endpoints.transaction.list, {
+				params: {
+					page: 1,
+					size: 50
+				}
+			})
 			.then((response) => {
 				const { items, page, size, total } = response.data;
 
@@ -58,7 +65,28 @@ const TransactionTable = () => {
 			.catch((error) => {
 				console.log("get transaction error : ", error);
 			});
+
+		getUserData();
 	}, []);
+
+	const getUserName = (id) => {
+		let user = [];
+		if (userData !== null && userData !== undefined) {
+			user = userData.filter(item => item.id === id);
+		}
+		return user[0]?.customerName;
+	}
+
+	const getUserData = () => {
+		axios
+			.get(endpoints.user.list)
+			.then((response) => {
+				setUserData(response.data.items);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
 
 	const handleSearch = (event) => {
 		const searchValue = event.target.value.toLowerCase();
@@ -74,9 +102,9 @@ const TransactionTable = () => {
 
 	const onChangePage = (event, newPage) => {
 		setPage(newPage);
-		console.log("change page: ", newPage);
 	}
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const searchTransaction = useCallback(() => {
 		axios
 			.get(endpoints.transaction.search, {
@@ -97,11 +125,18 @@ const TransactionTable = () => {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, [searchStr, rowsPerPage, currentPage]);
+	}, [currentPage, rowsPerPage, searchStr])
 
 	useEffect(() => {
-		searchTransaction();
-	}, [rowsPerPage, currentPage, searchTransaction]);
+		setMounted(true)
+	}, []);
+
+	useEffect(() => {
+		if (mounted) {
+			searchTransaction();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentPage, rowsPerPage, searchTransaction]);
 
 	const handleKeyBoard = (keyBoard) => {
 		if (keyBoard.key === "Enter" || keyBoard.code === "NumpadEnter") {
@@ -147,7 +182,7 @@ const TransactionTable = () => {
 											key={index}
 											onClick={() => table.onSelectRow(row.name)}
 										>
-											<TableCell>{row.user_id}</TableCell>
+											<TableCell>{getUserName(row.user_id)}</TableCell>
 											<TableCell align="left">{row.address_id}</TableCell>
 											<TableCell align="left">{row.transaction_hash}</TableCell>
 											<TableCell align="left">{row.amount}</TableCell>

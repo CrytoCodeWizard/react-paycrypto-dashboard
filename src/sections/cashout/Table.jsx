@@ -44,6 +44,8 @@ const CashOutTable = () => {
     const [currentPage, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(50);
     const [totalCount, setTotalCount] = useState(0);
+    const [userData, setUserData] = useState([]);
+    const [mounted, setMounted] = useState(false);
 
     const table = useTable({
         defaultOrderBy: "user"
@@ -53,7 +55,12 @@ const CashOutTable = () => {
 
     useEffect(() => {
         axios
-            .get(endpoints.cashout.search)
+            .get(endpoints.cashout.list, {
+                params: {
+                    page: 1,
+                    size: 50
+                }
+            })
             .then((response) => {
                 const { items, page, size, total } = response.data;
 
@@ -65,7 +72,28 @@ const CashOutTable = () => {
             .catch((error) => {
                 console.log("get cashout error : ", error);
             });
+
+        getUserData();
     }, []);
+
+    const getUserName = (id) => {
+        let user = [];
+        if (userData !== null && userData !== undefined) {
+            user = userData.filter(item => item.id === id);
+        }
+        return user[0]?.customerName;
+    }
+
+    const getUserData = () => {
+        axios
+            .get(endpoints.user.list)
+            .then((response) => {
+                setUserData(response.data.items);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 
     const handleSearch = (event) => {
         const searchValue = event.target.value.toLowerCase();
@@ -107,7 +135,14 @@ const CashOutTable = () => {
     }, [searchStr, rowsPerPage, currentPage]);
 
     useEffect(() => {
-        searchCashOut();
+        setMounted(true)
+    }, []);
+
+    useEffect(() => {
+        if (mounted) {
+            searchCashOut();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rowsPerPage, currentPage, searchCashOut]);
 
     const handleKeyBoard = (keyBoard) => {
@@ -154,7 +189,7 @@ const CashOutTable = () => {
                                             key={index}
                                             onClick={() => table.onSelectRow(row.name)}
                                         >
-                                            <TableCell>{row.user_id}</TableCell>
+                                            <TableCell>{getUserName(row.user_id)}</TableCell>
                                             <TableCell align="left">{row.total_in}</TableCell>
                                             <TableCell align="left">{row.total_out}</TableCell>
                                             <TableCell align="left">{row.deposit_energy}</TableCell>

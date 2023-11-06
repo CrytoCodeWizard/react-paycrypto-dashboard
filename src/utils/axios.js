@@ -62,4 +62,7 @@ export const endpoints = {
   profile: {
     list: '/me',
   },
+  user: {
+    list: '/user',
+  },
 };

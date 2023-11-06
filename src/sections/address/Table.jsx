@@ -37,6 +37,8 @@ const AddressTable = () => {
 	const [currentPage, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(50);
 	const [totalCount, setTotalCount] = useState(0);
+	const [userData, setUserData] = useState([]);
+	const [mounted, setMounted] = useState(false);
 
 	const table = useTable({
 		defaultOrderBy: "address"
@@ -46,7 +48,12 @@ const AddressTable = () => {
 
 	useEffect(() => {
 		axios
-			.get(endpoints.address.list)
+			.get(endpoints.address.list, {
+				params: {
+					page: 1,
+					size: 50
+				}
+			})
 			.then((response) => {
 				const { items, page, size, total } = response.data;
 
@@ -58,7 +65,28 @@ const AddressTable = () => {
 			.catch((error) => {
 				console.log("get address error : ", error);
 			});
+
+		getUserData();
 	}, []);
+
+	const getUserName = (id) => {
+		let user = [];
+		if (userData !== null && userData !== undefined) {
+			user = userData.filter(item => item.id === id);
+		}
+		return user[0]?.customerName;
+	}
+
+	const getUserData = () => {
+		axios
+			.get(endpoints.user.list)
+			.then((response) => {
+				setUserData(response.data.items);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
 
 	const handleSearch = (event) => {
 		const searchValue = event.target.value.toLowerCase();
@@ -74,7 +102,6 @@ const AddressTable = () => {
 
 	const onChangePage = (event, newPage) => {
 		setPage(newPage);
-		console.log("change page: ", newPage);
 	}
 
 	const searchAddress = useCallback(() => {
@@ -97,11 +124,18 @@ const AddressTable = () => {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, [searchStr, rowsPerPage, currentPage]);
+	}, [searchStr, currentPage, rowsPerPage]);
 
 	useEffect(() => {
-		searchAddress();
-	}, [rowsPerPage, currentPage, searchAddress]);
+		setMounted(true)
+	}, []);
+
+	useEffect(() => {
+		if (mounted) {
+			searchAddress();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentPage, rowsPerPage, searchAddress]);
 
 	const handleKeyBoard = (keyBoard) => {
 		if (keyBoard.key === "Enter" || keyBoard.code === "NumpadEnter") {
@@ -148,7 +182,7 @@ const AddressTable = () => {
 											onClick={() => table.onSelectRow(row.name)}
 										>
 											<TableCell>{row.address}</TableCell>
-											<TableCell align="left">{row.user_id}</TableCell>
+											<TableCell align="left">{getUserName(row.user_id)}</TableCell>
 											<TableCell align="left">{row.total_in}</TableCell>
 											<TableCell align="left">{row.total_out}</TableCell>
 										</TableRow>
