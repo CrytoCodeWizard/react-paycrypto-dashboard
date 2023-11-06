@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
@@ -33,22 +33,27 @@ const TABLE_HEAD = [
 
 const AddressTable = () => {
 	const [tableData, setTableData] = useState([]);
-	const [filteredData, setFilteredData] = useState([]);
+	const [searchStr, setSearchStr] = useState("");
+	const [currentPage, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(50);
+	const [totalCount, setTotalCount] = useState(0);
 
 	const table = useTable({
 		defaultOrderBy: "address"
 	});
 
-	const notFound = !filteredData.length;
+	const notFound = !totalCount;
 
 	useEffect(() => {
 		axios
 			.get(endpoints.address.list)
 			.then((response) => {
-				const { items } = response.data;
+				const { items, page, size, total } = response.data;
 
 				setTableData(items);
-				setFilteredData(items);
+				setPage(page - 1);
+				setRowsPerPage(size);
+				setTotalCount(total);
 			})
 			.catch((error) => {
 				console.log("get address error : ", error);
@@ -57,24 +62,67 @@ const AddressTable = () => {
 
 	const handleSearch = (event) => {
 		const searchValue = event.target.value.toLowerCase();
-		const tempData = tableData.filter(data =>
-			data.address.toLowerCase().includes(searchValue));
+		setSearchStr(searchValue);
+	}
 
-		setFilteredData(tempData);
+	const onChangeRowsPerPage = (event) => {
+		const { value } = event.target;
+
+		setRowsPerPage(value);
+		setPage(0);
+	}
+
+	const onChangePage = (event, newPage) => {
+		setPage(newPage);
+		console.log("change page: ", newPage);
+	}
+
+	const searchAddress = useCallback(() => {
+		axios
+			.get(endpoints.address.search, {
+				params: {
+					search_query: searchStr,
+					page: currentPage + 1,
+					size: rowsPerPage
+				}
+			})
+			.then((response) => {
+				const { items, page, size, total } = response.data;
+
+				setTableData(items);
+				setPage(page - 1);
+				setRowsPerPage(size);
+				setTotalCount(total);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, [searchStr, rowsPerPage, currentPage]);
+
+	useEffect(() => {
+		searchAddress();
+	}, [rowsPerPage, currentPage, searchAddress]);
+
+	const handleKeyBoard = (keyBoard) => {
+		if (keyBoard.key === "Enter" || keyBoard.code === "NumpadEnter") {
+			searchAddress();
+		}
 	}
 
 	return (
 		<>
 			<Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 3 }}>
 				<Typography variant="h6">
-					{filteredData.length} Address Found
+					{tableData.length} Address Found
 				</Typography>
 
 				<Tooltip title="Search Address">
 					<TextField
 						variant="outlined"
 						onChange={(event) => handleSearch(event)}
+						onKeyDown={handleKeyBoard}
 						label="Search Address"
+						defaultValue={searchStr}
 						InputProps={{
 							startAdornment: (
 								<InputAdornment position="start">
@@ -92,11 +140,7 @@ const AddressTable = () => {
 
 						<TableBody>
 							{
-								filteredData
-									.slice(
-										table.page * table.rowsPerPage,
-										table.page * table.rowsPerPage + table.rowsPerPage
-									)
+								tableData
 									.map((row, index) => (
 										<TableRow
 											hover
@@ -111,7 +155,7 @@ const AddressTable = () => {
 									))
 							}
 							<TableEmptyRows
-								emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+								emptyRows={emptyRows(table.page, table.rowsPerPage, totalCount)}
 							/>
 
 							<TableNoData notFound={notFound} title="Address" />
@@ -120,11 +164,11 @@ const AddressTable = () => {
 				</Scrollbar>
 			</TableContainer>
 			<TablePaginationCustom
-				count={filteredData.length}
-				page={table.page}
-				rowsPerPage={table.rowsPerPage}
-				onPageChange={table.onChangePage}
-				onRowsPerPageChange={table.onChangeRowsPerPage}
+				count={totalCount}
+				page={currentPage}
+				rowsPerPage={rowsPerPage}
+				onPageChange={onChangePage}
+				onRowsPerPageChange={onChangeRowsPerPage}
 			/>
 		</>
 	);

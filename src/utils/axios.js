@@ -45,15 +45,19 @@ export const endpoints = {
   },
   address: {
     list: '/address',
+    search: '/address/search',
   },
   transaction: {
     list: '/transaction',
+    search: '/transaction/search',
   },
   withdraw: {
     list: '/withdraw',
+    search: '/withdraw/search',
   },
   cashout: {
     list: '/cashout',
+    search: '/cashout/search',
   },
   profile: {
     list: '/me',

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
@@ -34,22 +34,27 @@ const TABLE_HEAD = [
 
 const WithTable = () => {
     const [tableData, setTableData] = useState([]);
-    const [filteredData, setFilteredData] = useState([]);
+    const [searchStr, setSearchStr] = useState("");
+    const [currentPage, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(50);
+    const [totalCount, setTotalCount] = useState(0);
 
     const table = useTable({
         defaultOrderBy: "user"
     });
 
-    const notFound = !filteredData.length;
+    const notFound = !totalCount;
 
     useEffect(() => {
         axios
-            .get(endpoints.withdraw.list)
+            .get(endpoints.withdraw.search)
             .then((response) => {
-                const { items } = response.data;
+                const { items, page, size, total } = response.data;
 
                 setTableData(items);
-                setFilteredData(items);
+                setPage(page - 1);
+                setRowsPerPage(size);
+                setTotalCount(total);
             })
             .catch((error) => {
                 console.log("get withdraw error : ", error);
@@ -58,24 +63,66 @@ const WithTable = () => {
 
     const handleSearch = (event) => {
         const searchValue = event.target.value.toLowerCase();
+        setSearchStr(searchValue);
+    }
 
-        const tempData = tableData.filter(data =>
-            data.withdraw_address.toString().toLowerCase().includes(searchValue));
+    const onChangeRowsPerPage = (event) => {
+        const { value } = event.target;
 
-        setFilteredData(tempData);
+        setRowsPerPage(value);
+        setPage(0);
+    }
+
+    const onChangePage = (event, newPage) => {
+        setPage(newPage);
+        console.log("change page: ", newPage);
+    }
+
+    const searchTransaction = useCallback(() => {
+        axios
+            .get(endpoints.withdraw.search, {
+                params: {
+                    search_query: searchStr,
+                    page: currentPage + 1,
+                    size: rowsPerPage
+                }
+            })
+            .then((response) => {
+                const { items, page, size, total } = response.data;
+
+                setTableData(items);
+                setPage(page - 1);
+                setRowsPerPage(size);
+                setTotalCount(total);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [searchStr, rowsPerPage, currentPage]);
+
+    useEffect(() => {
+        searchTransaction();
+    }, [rowsPerPage, currentPage, searchTransaction]);
+
+    const handleKeyBoard = (keyBoard) => {
+        if (keyBoard.key === "Enter" || keyBoard.code === "NumpadEnter") {
+            searchTransaction();
+        }
     }
 
     return (
         <>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 3 }}>
                 <Typography variant="h6">
-                    {filteredData.length} Withdraw Found
+                    {tableData.length} Withdraw Found
                 </Typography>
 
                 <Tooltip title="Search Withdraw">
                     <TextField
                         variant="outlined"
                         onChange={(event) => handleSearch(event)}
+                        onKeyDown={handleKeyBoard}
+                        defaultValue={searchStr}
                         label="Search Withdraw"
                         InputProps={{
                             startAdornment: (
@@ -94,11 +141,7 @@ const WithTable = () => {
 
                         <TableBody>
                             {
-                                filteredData
-                                    .slice(
-                                        table.page * table.rowsPerPage,
-                                        table.page * table.rowsPerPage + table.rowsPerPage
-                                    )
+                                tableData
                                     .map((row, index) => (
                                         <TableRow
                                             hover
@@ -123,11 +166,11 @@ const WithTable = () => {
                 </Scrollbar>
             </TableContainer>
             <TablePaginationCustom
-                count={filteredData.length}
-                page={table.page}
-                rowsPerPage={table.rowsPerPage}
-                onPageChange={table.onChangePage}
-                onRowsPerPageChange={table.onChangeRowsPerPage}
+                count={totalCount}
+                page={currentPage}
+                rowsPerPage={rowsPerPage}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}
             />
         </>
     );
