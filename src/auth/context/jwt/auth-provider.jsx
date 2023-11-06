@@ -74,7 +74,7 @@ export function AuthProvider({ children }) {
       sessionStorage.removeItem('access_token');
 
       // window.location.href = paths.auth.jwt.login;
-    }, 5000);
+    }, timeLeft);
   }, []);
 
   const initialize = useCallback(async () => {
