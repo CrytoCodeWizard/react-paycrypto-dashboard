@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack'
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
+import { paths } from 'src/routes/paths';
+
 import axios, { endpoints } from 'src/utils/axios';
 // import { useSnackbar } from 'src/components/snackbar';
 
@@ -62,19 +64,27 @@ export function AuthProvider({ children }) {
     clearTimeout(expiredTimer);
 
     expiredTimer = setTimeout(() => {
-      enqueueSnackbar('Token expired, Go to login Page!', {
+      enqueueSnackbar('Login Expired!', {
         variant: 'error',
         anchorOrigin: {
-          vertical: "center",
-          horizontal: "center"
+          vertical: "right",
+          horizontal: "top"
         },
-        autoHideDuration: null
+        autoHideDuration: null,
+        style: {
+          backgroundColor: "white",
+          color: "black",
+          border: "1px red solid"
+        }
       });
 
       sessionStorage.removeItem('access_token');
 
-      // window.location.href = paths.auth.jwt.login;
+      setTimeout(() => {
+        window.location.href = paths.auth.jwt.login;
+      }, 5000);
     }, timeLeft);
+
   }, []);
 
   const initialize = useCallback(async () => {
