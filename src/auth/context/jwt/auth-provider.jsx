@@ -1,18 +1,12 @@
 import PropTypes from 'prop-types';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack'
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
 import axios, { endpoints } from 'src/utils/axios';
+// import { useSnackbar } from 'src/components/snackbar';
 
 import { AuthContext } from './auth-context';
-import { setSession, isValidToken } from './utils';
-
-// ----------------------------------------------------------------------
-
-// NOTE:
-// We only build demo at basic level.
-// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
-
-// ----------------------------------------------------------------------
+import { jwtDecode, setSession, isValidToken } from './utils';
 
 const initialState = {
   user: null,
@@ -52,7 +46,36 @@ const reducer = (state, action) => {
 const STORAGE_KEY = 'access_token';
 
 export function AuthProvider({ children }) {
+  // const { enqueueSnackbar } = useSnackbar();
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const tokenExpired = useCallback((exp) => {
+    // eslint-disable-next-line prefer-const
+    let expiredTimer;
+
+    const currentTime = Date.now();
+
+    // Test token expires after 10s
+    // const timeLeft = currentTime + 10000 - currentTime; // ~10s
+    const timeLeft = exp * 1000 - currentTime;
+    console.log('left time', timeLeft);
+    clearTimeout(expiredTimer);
+
+    expiredTimer = setTimeout(() => {
+      enqueueSnackbar('Token expired, Go to login Page!', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: "center",
+          horizontal: "center"
+        },
+        maxSnack: 1000000000
+      });
+
+      sessionStorage.removeItem('access_token');
+
+      // window.location.href = paths.auth.jwt.login;
+    }, 5000);
+  }, []);
 
   const initialize = useCallback(async () => {
     try {
@@ -60,6 +83,9 @@ export function AuthProvider({ children }) {
 
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
+        // This function below will handle when token is expired
+        const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+        tokenExpired(exp);
 
         const response = await axios.get(endpoints.auth.me);
 
@@ -91,7 +117,7 @@ export function AuthProvider({ children }) {
         },
       });
     }
-  }, []);
+  }, [tokenExpired]);
 
   useEffect(() => {
     initialize();
@@ -112,6 +138,9 @@ export function AuthProvider({ children }) {
     const { access_token, user } = response.data;
 
     setSession(access_token);
+    // This function below will handle when token is expired
+    const { exp } = jwtDecode(access_token); // ~3 days by minimals server
+    tokenExpired(exp);
 
     dispatch({
       type: 'LOGIN',
@@ -122,7 +151,7 @@ export function AuthProvider({ children }) {
         },
       },
     });
-  }, []);
+  }, [tokenExpired]);
 
   // REGISTER
   const register = useCallback(async (email, password, firstName, lastName) => {
@@ -158,8 +187,6 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
-  // ----------------------------------------------------------------------
-
   const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
 
   const status = state.loading ? 'loading' : checkAuthenticated;
@@ -179,7 +206,10 @@ export function AuthProvider({ children }) {
     [login, logout, register, state.user, status]
   );
 
-  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={memoizedValue}>
+    <SnackbarProvider />
+    {children}
+  </AuthContext.Provider>;
 }
 
 AuthProvider.propTypes = {
