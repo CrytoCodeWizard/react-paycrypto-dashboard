@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
           vertical: "center",
           horizontal: "center"
         },
-        maxSnack: 1000000000
+        autoHideDuration: null
       });
 
       sessionStorage.removeItem('access_token');

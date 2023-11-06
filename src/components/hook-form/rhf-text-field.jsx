@@ -22,7 +22,6 @@ export default function RHFTextField({ name, helperText, type, ...other }) {
             if (type === 'number') {
               field.onChange(Number(event.target.value));
             } else {
-              console.log("log data : ", event.target.value);
               field.onChange(event.target.value);
             }
           }}
