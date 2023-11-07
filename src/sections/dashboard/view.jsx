@@ -33,7 +33,7 @@ const Dashboard = () => {
       <Grid container spacing={1}>
         <Grid xs={12} md={12}>
           <AppWelcome
-            title={`Welcome back 👋 ${userInfo?.customerName}`}
+            title={`Welcome back ${userInfo?.customerName} 👋`}
           // img={<SeoIllustration />}
           />
         </Grid>
