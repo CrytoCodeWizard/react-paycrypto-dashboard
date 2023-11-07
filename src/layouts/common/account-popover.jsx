@@ -46,7 +46,7 @@ export default function AccountPopover() {
     try {
       await logout();
       popover.onClose();
-      router.replace('/');
+      router.replace('/auth/jwt/login');
     } catch (error) {
       console.error(error);
     }
