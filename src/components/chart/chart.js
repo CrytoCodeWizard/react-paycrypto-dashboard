@@ -1,4 +1,5 @@
 import { memo } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ApexChart from 'react-apexcharts';
 
 import { alpha, styled } from '@mui/material/styles';
