@@ -13,7 +13,6 @@ export const paths = {
   auth: {
     jwt: {
       login: `${ROOTS.AUTH}/jwt/login`,
-      register: `${ROOTS.AUTH}/jwt/register`,
     },
   },
 
@@ -25,10 +24,5 @@ export const paths = {
     transaction: `${ROOTS.DASHBOARD}/transaction`,
     withdraw: `${ROOTS.DASHBOARD}/withdraw`,
     cashout: `${ROOTS.DASHBOARD}/cashout`,
-    group: {
-      root: `${ROOTS.DASHBOARD}/group`,
-      five: `${ROOTS.DASHBOARD}/group/five`,
-      six: `${ROOTS.DASHBOARD}/group/six`,
-    },
   },
 };

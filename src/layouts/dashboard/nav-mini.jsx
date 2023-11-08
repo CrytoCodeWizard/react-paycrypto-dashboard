@@ -43,7 +43,7 @@ export default function NavMini() {
           ...hideScroll.x,
         }}
       >
-        <Logo sx={{ mx: 'auto', my: 2 }} />
+        <Logo mini="true" sx={{ width: "2rem", height: "2.5rem", mx: 'auto', my: 2 }} />
 
         <NavSectionMini
           data={navData}
