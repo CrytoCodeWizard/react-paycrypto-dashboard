@@ -15,8 +15,6 @@ import { HEADER } from '../config-layout';
 import { useNavData } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
 
-// ----------------------------------------------------------------------
-
 function NavHorizontal() {
   const theme = useTheme();
 

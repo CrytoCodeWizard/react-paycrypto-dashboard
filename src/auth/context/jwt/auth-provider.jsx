@@ -5,7 +5,6 @@ import { useMemo, useEffect, useReducer, useCallback } from 'react';
 import { paths } from 'src/routes/paths';
 
 import axios, { endpoints } from 'src/utils/axios';
-// import { useSnackbar } from 'src/components/snackbar';
 
 import { AuthContext } from './auth-context';
 import { jwtDecode, setSession, isValidToken } from './utils';
@@ -48,44 +47,7 @@ const reducer = (state, action) => {
 const STORAGE_KEY = 'access_token';
 
 export function AuthProvider({ children }) {
-  // const { enqueueSnackbar } = useSnackbar();
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const tokenExpired = useCallback((exp) => {
-    // eslint-disable-next-line prefer-const
-    let expiredTimer;
-
-    const currentTime = Date.now();
-
-    // Test token expires after 10s
-    // const timeLeft = currentTime + 10000 - currentTime; // ~10s
-    const timeLeft = exp * 1000 - currentTime;
-    console.log('left time', timeLeft);
-    clearTimeout(expiredTimer);
-
-    expiredTimer = setTimeout(() => {
-      enqueueSnackbar('Login Expired!', {
-        variant: 'error',
-        anchorOrigin: {
-          vertical: "right",
-          horizontal: "top"
-        },
-        autoHideDuration: null,
-        style: {
-          backgroundColor: "white",
-          color: "black",
-          border: "1px red solid"
-        }
-      });
-
-      sessionStorage.removeItem('access_token');
-
-      setTimeout(() => {
-        window.location.href = paths.auth.jwt.login;
-      }, 5000);
-    }, timeLeft);
-
-  }, []);
 
   const initialize = useCallback(async () => {
     try {
@@ -94,11 +56,11 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
         // This function below will handle when token is expired
-        const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
-        tokenExpired(exp);
+        // const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+        // tokenExpired(exp);
 
-        const response = await axios.get(endpoints.auth.me);
-
+        const response = await axios.get(endpoints.profile.list);
+        console.log("initial user : ", response.data);
         const user = response.data;
 
         dispatch({
@@ -127,11 +89,48 @@ export function AuthProvider({ children }) {
         },
       });
     }
-  }, [tokenExpired]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     initialize();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialize]);
+
+  const tokenExpired = useCallback((exp) => {
+    // eslint-disable-next-line prefer-const
+    let expiredTimer;
+
+    const currentTime = Date.now();
+
+    const timeLeft = exp * 1000 - currentTime;
+
+    clearTimeout(expiredTimer);
+
+    expiredTimer = setTimeout(() => {
+      enqueueSnackbar('Login Expired!', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: "right",
+          horizontal: "top"
+        },
+        autoHideDuration: null,
+        style: {
+          backgroundColor: "white",
+          color: "black",
+          border: "1px red solid"
+        }
+      });
+
+      sessionStorage.removeItem('access_token');
+
+      setTimeout(() => {
+        window.location.href = paths.auth.jwt.login;
+      }, 5000);
+    }, timeLeft);
+
+  }, []);
 
   // LOGIN
   const login = useCallback(async (username, password) => {
@@ -145,9 +144,12 @@ export function AuthProvider({ children }) {
       }
     });
 
-    const { access_token, user } = response.data;
+    const { access_token } = response.data;
 
     setSession(access_token);
+
+    const profile = await axios.get(endpoints.profile.list);
+
     // This function below will handle when token is expired
     const { exp } = jwtDecode(access_token); // ~3 days by minimals server
     tokenExpired(exp);
@@ -156,7 +158,7 @@ export function AuthProvider({ children }) {
       type: 'LOGIN',
       payload: {
         user: {
-          ...user,
+          ...profile.data,
           access_token,
         },
       },

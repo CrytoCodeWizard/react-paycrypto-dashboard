@@ -2,8 +2,6 @@ import { useContext } from 'react';
 
 import { AuthContext } from '../context/jwt/auth-context';
 
-// ----------------------------------------------------------------------
-
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
 

@@ -9,7 +9,6 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgGradient } from 'src/theme/css';
 
-import Logo from 'src/components/logo';
 
 // ----------------------------------------------------------------------
 
@@ -18,15 +17,15 @@ export default function AuthClassicLayout({ children, image, title }) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const renderLogo = (
-    <Logo
-      sx={{
-        zIndex: 9,
-        position: 'absolute',
-        m: { xs: 2, md: 5 },
-      }}
-    />
-  );
+  // const renderLogo = (
+  //   <Logo
+  //     sx={{
+  //       zIndex: 9,
+  //       position: 'absolute',
+  //       m: { xs: 2, md: 5 },
+  //     }}
+  //   />
+  // );
 
   const renderContent = (
     <Stack
@@ -66,7 +65,7 @@ export default function AuthClassicLayout({ children, image, title }) {
       <Box
         component="img"
         alt="auth"
-        src={image || '/assets/logo.png'}
+        src="/assets/logo.png"
         sx={{
           maxWidth: {
             xs: 480,
@@ -86,7 +85,7 @@ export default function AuthClassicLayout({ children, image, title }) {
         minHeight: '100vh',
       }}
     >
-      {renderLogo}
+      {/* {renderLogo} */}
 
       {mdUp && renderSection}
 

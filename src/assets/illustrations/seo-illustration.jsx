@@ -225,8 +225,6 @@ function SeoIllustration({ ...other }) {
           <stop offset="1" stopColor={PRIMARY_DARK} />
         </linearGradient>
       </defs>
-
-      {/* <image href="/assets/logo.png" height="300" /> */}
     </Box>
   );
 }

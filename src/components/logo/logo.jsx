@@ -42,8 +42,8 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
     >
       {
         other.mini ?
-          <img src="assets/logo_mini.png" alt="" /> :
-          <img src="assets/logo.png" alt="" />
+          <img src="/assets/logo_mini.png" alt="" /> :
+          <img src="/assets/logo.png" alt="" />
       }
 
     </Box>
