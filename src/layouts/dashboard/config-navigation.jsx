@@ -75,6 +75,11 @@ export function useNavData() {
             title: 'cashout',
             path: paths.dashboard.cashout,
             icon: ICONS.job,
+          },
+          {
+            title: 'user',
+            path: paths.dashboard.user,
+            icon: ICONS.user,
           }
         ],
       },

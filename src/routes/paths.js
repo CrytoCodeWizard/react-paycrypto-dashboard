@@ -24,5 +24,6 @@ export const paths = {
     transaction: `${ROOTS.DASHBOARD}/transaction`,
     withdraw: `${ROOTS.DASHBOARD}/withdraw`,
     cashout: `${ROOTS.DASHBOARD}/cashout`,
+    user: `${ROOTS.DASHBOARD}/user`,
   },
 };

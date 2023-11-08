@@ -13,6 +13,7 @@ const Withdraw = lazy(() => import('src/pages/dashboard/Withdraw'));
 const Transaction = lazy(() => import('src/pages/dashboard/Transaction'));
 const CashOut = lazy(() => import('src/pages/dashboard/CashOut'));
 const Profile = lazy(() => import('src/pages/dashboard/Profile'));
+const User = lazy(() => import('src/pages/dashboard/User'));
 
 const PageFive = lazy(() => import('src/pages/dashboard/Dashboard'));
 const PageSix = lazy(() => import('src/pages/dashboard/six'));
@@ -36,6 +37,7 @@ export const dashboardRoutes = [
       { path: 'withdraw', element: <Withdraw /> },
       { path: 'cashout', element: <CashOut /> },
       { path: 'profile', element: <Profile /> },
+      { path: 'user', element: <User /> },
       {
         path: 'group',
         children: [

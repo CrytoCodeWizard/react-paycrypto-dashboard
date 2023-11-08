@@ -226,7 +226,7 @@ function SeoIllustration({ ...other }) {
         </linearGradient>
       </defs>
 
-      <image href="/assets/logo.png" height="300" />
+      {/* <image href="/assets/logo.png" height="300" /> */}
     </Box>
   );
 }

@@ -63,5 +63,6 @@ export const endpoints = {
   },
   user: {
     list: '/user',
+    search: '/user/search',
   },
 };
