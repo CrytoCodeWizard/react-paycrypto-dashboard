@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, useCallback } from "react";
 
 import Slide from '@mui/material/Slide';
 import Dialog from '@mui/material/Dialog';
@@ -24,53 +24,53 @@ import FormProvider, {
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 const UserModal = ({ dialog, type, user }) => {
-    const [userData, setUserData] = useState({});
+    const [customerName, setCustomerName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [webhook, setWebhook] = useState("");
+    const [casinoWallet, setCasinoWallet] = useState("");
+    const [withdrawWalletPrivateKey, setWithdrawWalletPrivateKey] = useState("");
+    const [withdrawWalletAddress, setWithdrawWalletAddress] = useState("");
+    const [agencyWalletAddress, setAgencyWalletAddress] = useState("");
+    const [depositPercentageFee, setDepositPercentageFee] = useState(0);
+    const [withdrawPercentageFee, setWithdrawPercentageFee] = useState(0);
+    const [fixFee, setFixFee] = useState(0);
+    const [userRole, setUserRole] = useState("USER");
+
     useEffect(() => {
-        console.log("create user data :", user);
-        setUserData({
-            customerName: user?.customerName || "",
-            email: user?.email || "",
-            password: "",
-            webhook: user?.webhook,
-            casinoWallet: "",
-            withdrawWalletAddress: "",
-            withdrawWalletPrivateKey: "",
-            agencyWalletAddress: "",
-            depositPercentageFee: 0,
-            withdrawPercentageFee: 0,
-            fixFee: 0,
-            userRole: user?.role || "USER"
-        });
-    }, [type, user]);
+        if (type === "Create") {
+            setCustomerName("");
+            setEmail("");
+            setWebhook("");
+            setUserRole("USER");
+        } else if (type === "Update") {
+            setCustomerName(user.customerName);
+            setEmail(user.email);
+            setWebhook(user.webhook);
+            setUserRole(user.role);
+        }
+    }, [user, type]);
 
     const UserSchema = Yup.object().shape({
-        customerName: Yup.string().required('Customer Name is required'),
-        email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-        password: Yup.string().required('Password is required'),
-        webhook: Yup.string().required('Web Hook is required'),
-        casinoWallet: Yup.string().required('Casino Wallet is required'),
-        agencyWalletAddress: Yup.string().required('With Draw Wallet Address is required'),
-        withdrawWalletAddress: Yup.string().required('With Draw Wallet Address is required'),
-        withdrawWalletPrivateKey: Yup.string().required('With Draw Wallet PrivateKey is required'),
-        depositPercentageFee: Yup.string().required('Deposit Percentage Fee is required'),
-        withdrawPercentageFee: Yup.string().required('With Draw Percentage Fee is required'),
-        fixFee: Yup.string().required('Fix fee is required'),
-        // userRole: Yup.string().required('Fix fee is required'),
+        // customerName: Yup.string().required('Customer Name is required'),
+        // email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+        // webhook: Yup.string().required('Web Hook is required'),
+        // password: Yup.string().required('Password is required'),
     });
 
     const userDefaultValues = {
-        customerName: user?.customerName || "",
-        email: user?.email || "",
-        password: "",
-        webhook: user?.webhook,
-        casinoWallet: "",
-        withdrawWalletAddress: "",
-        withdrawWalletPrivateKey: "",
-        agencyWalletAddress: "",
-        depositPercentageFee: 0,
-        withdrawPercentageFee: 0,
-        fixFee: 0,
-        userRole: user?.role || "USER"
+        customerName,
+        email,
+        password,
+        webhook,
+        casinoWallet,
+        withdrawWalletAddress,
+        withdrawWalletPrivateKey,
+        agencyWalletAddress,
+        depositPercentageFee,
+        withdrawPercentageFee,
+        fixFee,
+        userRole,
     }
 
     const methods = useForm({
@@ -84,9 +84,9 @@ const UserModal = ({ dialog, type, user }) => {
         formState: { isSubmitting },
     } = methods;
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit((data) => {
         console.log("submit data : ", data);
-        if (type === "Create") {
+        if (type === "Created") {
             axios
                 .post(endpoints.user.list, data)
                 .then(response => {
@@ -97,7 +97,7 @@ const UserModal = ({ dialog, type, user }) => {
                     console.log("create user error : ", error);
                     reset();
                 });
-        } else {
+        } else if (type === "craere") {
             axios
                 .put(`${endpoints.user.list}/${user.id}`, data, {
                     headers: {
@@ -114,6 +114,30 @@ const UserModal = ({ dialog, type, user }) => {
                 });
         }
     });
+
+    const handleUserChange = useCallback((event) => {
+        const { name, value } = event.target;
+
+        const stateUpdateFunctions = {
+            customerName: setCustomerName,
+            email: setEmail,
+            password: setPassword,
+            webhook: setWebhook,
+            casinoWallet: setCasinoWallet,
+            withdrawWalletAddress: setWithdrawWalletAddress,
+            withdrawWalletPrivateKey: setWithdrawWalletPrivateKey,
+            agencyWalletAddress: setAgencyWalletAddress,
+            depositPercentageFee: setDepositPercentageFee,
+            withdrawPercentageFee: setWithdrawPercentageFee,
+            fixFee: setFixFee,
+            role: setUserRole
+        };
+
+        const setState = stateUpdateFunctions[name];
+        if (setState) {
+            setState(value);
+        }
+    }, []);
 
     return (
         <Dialog
@@ -135,7 +159,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Customer Name"
-                                defaultValue={userData.customerName}
+                                onChange={(event) => handleUserChange(event)}
+                                value={customerName}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -146,7 +171,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Email Address"
-                                defaultValue={userData.email}
+                                onChange={(event) => handleUserChange(event)}
+                                value={email}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -157,6 +183,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Password"
+                                onChange={(event) => handleUserChange(event)}
+                                value={password}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -167,7 +195,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Web Hook"
-                                defaultValue={userData.webhook}
+                                onChange={(event) => handleUserChange(event)}
+                                value={webhook}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -178,6 +207,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Casino Wallet"
+                                value={casinoWallet}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -188,6 +219,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Withdraw Wallet Address"
+                                value={withdrawWalletAddress}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -198,6 +231,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Withdraw Wallet PrivateKey"
+                                value={withdrawWalletPrivateKey}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={6}>
@@ -208,6 +243,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Agency Wallet Address"
+                                value={agencyWalletAddress}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={4}>
@@ -218,6 +255,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Deposit Percentage Fee"
+                                value={depositPercentageFee}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={4}>
@@ -228,6 +267,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Withdraw Percentage Fee"
+                                value={withdrawPercentageFee}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={4}>
@@ -238,6 +279,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 margin="dense"
                                 variant="outlined"
                                 label="Fix Fee"
+                                value={fixFee}
+                                onChange={(event) => handleUserChange(event)}
                             />
                         </Grid>
                         <Grid xs={12} md={12}>
@@ -245,7 +288,8 @@ const UserModal = ({ dialog, type, user }) => {
                                 variant="outlined"
                                 label="User Role"
                                 name='role'
-                                defaultValue={userData.userRole}
+                                value={userRole}
+                                onChange={(event) => handleUserChange(event)}
                             >
                                 {[
                                     { value: "USER", label: "User" },

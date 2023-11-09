@@ -57,7 +57,7 @@ export default function JwtLoginView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-
+    console.log("login data : ", data);
     try {
       await login?.(data.username, data.password);
 

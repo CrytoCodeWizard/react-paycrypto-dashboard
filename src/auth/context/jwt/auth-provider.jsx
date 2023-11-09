@@ -42,8 +42,6 @@ const reducer = (state, action) => {
   return state;
 };
 
-// ----------------------------------------------------------------------
-
 const STORAGE_KEY = 'access_token';
 
 export function AuthProvider({ children }) {
@@ -56,8 +54,8 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
         // This function below will handle when token is expired
-        // const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
-        // tokenExpired(exp);
+        const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+        tokenExpired(exp);
 
         const response = await axios.get(endpoints.profile.list);
         console.log("initial user : ", response.data);
@@ -105,7 +103,7 @@ export function AuthProvider({ children }) {
     const currentTime = Date.now();
 
     const timeLeft = exp * 1000 - currentTime;
-
+    console.log("expired time : ", exp, currentTime, timeLeft);
     clearTimeout(expiredTimer);
 
     expiredTimer = setTimeout(() => {

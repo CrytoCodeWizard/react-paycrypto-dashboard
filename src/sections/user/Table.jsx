@@ -52,7 +52,6 @@ const UserTable = () => {
     const [mounted, setMounted] = useState(false);
     const [modalType, setModalType] = useState("Create");
     const [modalData, setModalData] = useState({});
-    // const [userRole, setUserRole] = useState("USER");
 
     const updateDialog = useBoolean();
     const dialog = useBoolean();
@@ -66,6 +65,7 @@ const UserTable = () => {
     const openCreateModal = () => {
         dialog.onTrue();
         setModalType("Create");
+        setModalData({});
     }
 
     const openEditModal = (data) => {
